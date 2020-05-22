@@ -1,0 +1,76 @@
+name: yay
+
+on:
+  repository_dispatch:
+    types: [yay]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux
+      options: --privileged
+      volumes:
+        - /sys/fs/cgroup:/sys/fs/cgroup
+
+    steps:
+      - name: Get time
+        id: time
+        run: echo "::set-output name=time::$(date +%F-%T)"
+
+      - name: Cache pacman packages
+        uses: actions/cache@master
+        with:
+          path: /var/cache/pacman/pkg
+          key: pacman-cache-x86_64-${{ steps.time.outputs.time }}
+          restore-keys: pacman-cache-x86_64-
+
+      - name: Update system
+        run: |
+          pacman -Syu --noconfirm
+
+      - name: Install runtime dependencies
+        run: |
+          pacman -S --noconfirm --needed base-devel devtools dbus git wget
+
+      - uses: actions/checkout@master
+
+      - name: Configure build environment
+        run: |
+          mkdir -p "$HOME"/{packages,sources,srcpackages,makepkglogs}
+          sed \
+            -e "s|MAKEFLAGS=.*|MAKEFLAGS=-j$(nproc)|" \
+            -e "s|#PKGDEST=.*|PKGDEST='$HOME/packages'|" \
+            -e "s|#SRCDEST=.*|SRCDEST='$HOME/sources'|" \
+            -e "s|#SRCPKGDEST=.*|SRCPKGDEST='$HOME/srcpackages'|" \
+            -e "s|#LOGDEST=.*|LOGDEST='$HOME/makepkglogs'|" \
+            -i /etc/makepkg.conf
+          dbus-uuidgen --ensure=/etc/machine-id
+          useradd -m pkgbuild
+          chown -R pkgbuild:root "$HOME"
+
+      - name: Fetch PKGBUILD
+        run: |
+          wget -O - https://aur.archlinux.org/cgit/aur.git/snapshot/yay.tar.gz | tar zxvf -
+
+      - name: Build package
+        run: |
+          cd yay
+          extra-x86_64-build -- -U pkgbuild 1>"$HOME"/extra-x86_64-build.log 2>&1
+          ls -l "$HOME"/{packages,sources,srcpackages,makepkglogs}
+
+      - name: Upload package
+        uses: actions/upload-artifact@v2
+        with:
+          name: yay
+          path: '~/packages/yay-*.pkg.tar.zst'
+
+      - name: Upload logs
+        uses: actions/upload-artifact@v2
+        with:
+          name: extra-x86_64-build.log
+          path: '~/extra-x86_64-build.log'
+
+      - name: Cleanup cache
+        run: |
+          pacman -Sc --noconfirm
