@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: archlinux
-      options: --privileged
+      options: --privileged --user 1001
       volumes:
         - /sys/fs/cgroup:/sys/fs/cgroup
 
@@ -34,6 +34,8 @@ jobs:
           repository: petronny/lilac
           path: lilac
 
+      - run: whoami
+
       - name: Initialize
         id: initialization
         run: ${GITHUB_WORKSPACE}/action-tools/initialize.sh
@@ -42,7 +44,7 @@ jobs:
 
       - name: Build the package with lilac
         env:
-          pkgbase: ${{ steps.initialization.outputs.pkgbase}}
+          pkgbase: ${{ steps.initialization.outputs.pkgbase }}
         run: |
           cd ${pkgbase}
           PYTHONPATH=~/lilac:~/lilac/vendor ./lilac.py
