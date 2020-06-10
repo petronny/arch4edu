@@ -35,9 +35,9 @@ jobs:
           path: lilac
 
       - run: |
-        pwd
-        ls -al
-        ls -al lilac
+          pwd
+          ls -al
+          ls -al lilac
 
       - name: Initialize
         id: initialization
