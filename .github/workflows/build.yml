@@ -34,19 +34,23 @@ jobs:
           repository: archlinuxcn/lilac
           path: lilac
 
+      -run: |
+        pwd
+        ls -al
+        ls -al lilac
+
       - name: Initialize
         id: initialization
         run: ${GITHUB_WORKSPACE}/action-tools/initialize.sh
 
       - uses: actions/checkout@master
 
-      - name: Build the package
+      - name: Build the package with lilac
         env:
           pkgbase: ${{ steps.initialization.outputs.pkgbase}}
         run: |
           cd ${pkgbase}
-          PYTHONPATH=$PYTHONPATH:${GITHUB_WORKSPACE}/lilac:${GITHUB_WORKSPACE}/lilac/vendor \
-            ./lilac.py
+          PYTHONPATH=~/lilac:~/lilac/vendor ./lilac.py
 
       - name: Upload package
         uses: actions/upload-artifact@v2
