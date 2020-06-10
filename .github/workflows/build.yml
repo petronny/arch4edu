@@ -45,7 +45,7 @@ jobs:
           pkgbase: ${{ steps.initialization.outputs.pkgbase}}
         run: |
           cd ${pkgbase}
-          PYTHONPATH=$PYTHONPATH:${GITHUB_WORKSPACE}/lilac:${GITHUB_WORKSPACE}/lilac/vendor
+          PYTHONPATH=$PYTHONPATH:${GITHUB_WORKSPACE}/lilac:${GITHUB_WORKSPACE}/lilac/vendor \
             ./lilac.py
 
       - name: Upload package
