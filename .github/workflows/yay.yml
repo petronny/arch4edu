@@ -28,10 +28,12 @@ jobs:
       - uses: actions/checkout@master
         with:
           repository: petronny/action-tools
+          path: action-tools
 
       - run: |
           pwd
           ls
+          env
 
       - name: Initialize
         run: |
