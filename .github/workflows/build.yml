@@ -45,7 +45,7 @@ jobs:
           pkgbase: ${{ steps.initialization.outputs.pkgbase}}
         run: |
           cd ${pkgbase}
-          su pkgbuild -c 'PYTHONPATH=~/lilac:~/lilac/vendor ./lilac.py'
+          PYTHONPATH=~/lilac:~/lilac/vendor ./lilac.py
 
       - name: Upload package
         uses: actions/upload-artifact@v2
