@@ -32,11 +32,7 @@ jobs:
 
       - name: Initialize
         run: |
-          pwd
-          ls
-          ls actions-tools
-          ls ${GITHUB_WORKSPACE}/actions-tools
-          ${GITHUB_WORKSPACE}/actions-tools/initialize.sh
+          ${GITHUB_WORKSPACE}/action-tools/initialize.sh
 
       - uses: actions/checkout@master
 
