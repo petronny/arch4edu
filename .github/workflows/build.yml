@@ -54,7 +54,6 @@ jobs:
           su pkgbuild -c 'PYTHONPATH=~/lilac:~/lilac/vendor ./lilac.py' | tee ~/build.log
 
       - name: Upload package
-        env:
         uses: actions/upload-artifact@v2
         with:
           name: packages
