@@ -31,7 +31,7 @@ jobs:
 
       - uses: actions/checkout@master
         with:
-          repository: archlinuxcn/lilac
+          repository: petronny/lilac
           path: lilac
 
       - name: Initialize
