@@ -34,14 +34,16 @@ jobs:
           repository: petronny/lilac
           path: lilac
 
+      - name: Initialize
+        id: initialization
+        run: ${GITHUB_WORKSPACE}/action-tools/initialize.sh
+
       - uses: actions/checkout@master
         with:
           repository: petronny/arch4edu
           path: arch4edu
 
-      - name: Initialize
-        id: initialization
-        run: ${GITHUB_WORKSPACE}/action-tools/initialize.sh
+      - run: pre-build.sh
 
       - name: Build the package with lilac
         env:
