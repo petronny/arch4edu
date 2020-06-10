@@ -51,8 +51,8 @@ jobs:
       - name: Upload package
         uses: actions/upload-artifact@v2
         with:
-          name: yay
-          path: '~/packages/yay-*.pkg.tar.zst'
+          name: packages
+          path: '~/packages'
 
       - name: Upload logs
         uses: actions/upload-artifact@v2
