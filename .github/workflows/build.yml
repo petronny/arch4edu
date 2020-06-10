@@ -51,13 +51,15 @@ jobs:
         run: |
           cd ~/arch4edu/${pkgbase}
           ls -al
-          su pkgbuild -c 'PYTHONPATH=~/lilac:~/lilac/vendor ./lilac.py'
+          su pkgbuild -c 'PYTHONPATH=~/lilac:~/lilac/vendor ./lilac.py' | tee ~/build.log
 
       - name: Upload package
+        env:
+          pkgbase: ${{ steps.initialization.outputs.pkgbase }}
         uses: actions/upload-artifact@v2
         with:
           name: packages
-          path: '~/packages'
+          path: '~/arch4edu/${pkgbase}/*.pkg.tar.zst'
 
       - name: Upload logs
         uses: actions/upload-artifact@v2
