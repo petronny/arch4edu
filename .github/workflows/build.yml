@@ -34,11 +34,6 @@ jobs:
           repository: archlinuxcn/lilac
           path: lilac
 
-      - run: |
-          pwd
-          ls -al
-          ls -al lilac
-
       - name: Initialize
         id: initialization
         run: ${GITHUB_WORKSPACE}/action-tools/initialize.sh
