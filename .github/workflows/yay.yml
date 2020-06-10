@@ -32,7 +32,7 @@ jobs:
 
       - name: Initialize
         run: |
-          actions-tools/initialize.sh
+          ${GITHUB_WORKSPACE}/actions-tools/initialize.sh
 
       - uses: actions/checkout@master
 
