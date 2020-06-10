@@ -46,7 +46,7 @@ jobs:
 
       - name: Post-build
         run: |
-          clean-up-cache.sh
+          aur-post-build.sh
 
       - name: Upload package
         uses: actions/upload-artifact@v2
