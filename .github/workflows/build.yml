@@ -50,6 +50,7 @@ jobs:
           pkgbase: ${{ steps.initialization.outputs.pkgbase }}
         run: |
           cd ~/arch4edu/${pkgbase}
+          ls -al
           su pkgbuild -c 'PYTHONPATH=~/lilac:~/lilac/vendor ./lilac.py'
 
       - name: Upload package
