@@ -46,10 +46,8 @@ jobs:
       - run: pre-build.sh
 
       - name: Build the package with lilac
-        env:
-          pkgbase: ${{ steps.initialization.outputs.pkgbase }}
         run: |
-          cd ~/arch4edu/${pkgbase}
+          cd ~/arch4edu/${{ steps.initialization.outputs.pkgbase }}
           ls -al
           su pkgbuild -c 'PYTHONPATH=~/lilac:~/lilac/vendor ./lilac.py' | tee ~/build.log
 
