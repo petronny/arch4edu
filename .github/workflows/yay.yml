@@ -18,46 +18,42 @@ jobs:
         id: time
         run: echo "::set-output name=time::$(date +%F-%T)"
 
-      - name: Cache pacman packages
+      - name: Set up cache
         uses: actions/cache@master
         with:
           path: /var/cache/pacman/pkg
           key: pacman-cache-x86_64-${{ steps.time.outputs.time }}
           restore-keys: pacman-cache-x86_64-
 
-      - name: Upgrade system
-        run: |
-          pacman -Syu --noconfirm
+      - uses: actions/checkout@master
+        with:
+          repository: petronny/action-tools
 
-      - name: Install runtime dependencies
+      - run: |
+          pwd
+          ls
+
+      - name: Initialize
         run: |
-          pacman -S --noconfirm --needed base-devel devtools dbus git wget
+          export PATH=${GITHUB_WORKSPACE}/action-tools:${PATH}
+          initialize.sh
 
       - uses: actions/checkout@master
 
-      - name: Configure build environment
+      - name: Pre-build
         run: |
-          mkdir -p "$HOME"/{packages,sources,srcpackages,makepkglogs}
-          sed \
-            -e "s|MAKEFLAGS=.*|MAKEFLAGS=-j$(nproc)|" \
-            -e "s|#PKGDEST=.*|PKGDEST='$HOME/packages'|" \
-            -e "s|#SRCDEST=.*|SRCDEST='$HOME/sources'|" \
-            -e "s|#SRCPKGDEST=.*|SRCPKGDEST='$HOME/srcpackages'|" \
-            -e "s|#LOGDEST=.*|LOGDEST='$HOME/makepkglogs'|" \
-            -i /etc/makepkg.conf
-          dbus-uuidgen --ensure=/etc/machine-id
-          useradd -m pkgbuild
-          chown -R pkgbuild:root "$HOME"
+          pwd
+          cd ${GITHUB_WORKFLOW}
+          aur-pre-build.sh yay
 
-      - name: Fetch PKGBUILD
+      - name: Build the package
         run: |
-          wget -O - https://aur.archlinux.org/cgit/aur.git/snapshot/yay.tar.gz | tar zxvf -
-
-      - name: Build package
-        run: |
-          cd yay
           extra-x86_64-build -- -U pkgbuild 1>"$HOME"/extra-x86_64-build.log 2>&1
           ls -l "$HOME"/{packages,sources,srcpackages,makepkglogs}
+
+      - name: Post-build
+        run: |
+          clean-up-cache.sh
 
       - name: Upload package
         uses: actions/upload-artifact@v2
@@ -70,7 +66,3 @@ jobs:
         with:
           name: extra-x86_64-build.log
           path: '~/extra-x86_64-build.log'
-
-      - name: Cleanup cache
-        run: |
-          pacman -Sc --noconfirm
