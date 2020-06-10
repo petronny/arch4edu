@@ -57,8 +57,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: packages
-          path: /arch4edu/${pkgbase}/*.pkg.tar.zst"
-          pkgbase: ${{ steps.initialization.outputs.home }}/arch4edu/${{ steps.initialization.outputs.pkgbase }}/*.pkg.tar.zst
+          path: ${{ steps.initialization.outputs.home }}/arch4edu/${{ steps.initialization.outputs.pkgbase }}/*.pkg.tar.zst
 
       - name: Upload logs
         uses: actions/upload-artifact@v2
