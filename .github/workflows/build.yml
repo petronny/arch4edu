@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: archlinux
-      options: --privileged --user 1001
+      options: --privileged
       volumes:
         - /sys/fs/cgroup:/sys/fs/cgroup
 
@@ -34,20 +34,21 @@ jobs:
           repository: petronny/lilac
           path: lilac
 
-      - run: whoami
+      - uses: actions/checkout@master
+        with:
+          repository: petronny/arch4edu
+          path: arch4edu
 
       - name: Initialize
         id: initialization
         run: ${GITHUB_WORKSPACE}/action-tools/initialize.sh
 
-      - uses: actions/checkout@master
-
       - name: Build the package with lilac
         env:
           pkgbase: ${{ steps.initialization.outputs.pkgbase }}
         run: |
-          cd ${pkgbase}
-          PYTHONPATH=~/lilac:~/lilac/vendor ./lilac.py
+          cd ~/arch4edu/${pkgbase}
+          su pkgbuild -c 'PYTHONPATH=~/lilac:~/lilac/vendor ./lilac.py'
 
       - name: Upload package
         uses: actions/upload-artifact@v2
