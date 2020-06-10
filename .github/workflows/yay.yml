@@ -30,23 +30,18 @@ jobs:
           repository: petronny/action-tools
           path: action-tools
 
-      - run: |
-          pwd
-          ls
-          env
-
       - name: Initialize
         run: |
-          export PATH=${GITHUB_WORKSPACE}/action-tools:${PATH}
-          initialize.sh
+          actions-tools/initialize.sh
 
       - uses: actions/checkout@master
 
       - name: Pre-build
         run: |
           pwd
+          ls
           cd ${GITHUB_WORKFLOW}
-          aur-pre-build.sh yay
+          aur-pre-build.sh
 
       - name: Build the package
         run: |
