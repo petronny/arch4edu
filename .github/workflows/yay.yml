@@ -31,22 +31,18 @@ jobs:
           path: action-tools
 
       - name: Initialize
-        run: |
-          ${GITHUB_WORKSPACE}/action-tools/initialize.sh
+        run: ${GITHUB_WORKSPACE}/action-tools/initialize.sh
 
       - uses: actions/checkout@master
 
       - name: Pre-build
-        run: |
-          aur-pre-build.sh
+        run: aur-pre-build.sh
 
       - name: Build the package
-        run: |
-          archbuild.sh
+        run: archbuild.sh
 
       - name: Post-build
-        run: |
-          aur-post-build.sh
+        run: aur-post-build.sh
 
       - name: Upload package
         uses: actions/upload-artifact@v2
