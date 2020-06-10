@@ -42,6 +42,8 @@ jobs:
 
       - name: Build the package
         run: |
+          pwd
+          archbuild.py
           $(archbuild.py)
 
       - name: Post-build
