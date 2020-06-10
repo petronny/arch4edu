@@ -33,6 +33,8 @@ jobs:
           repository: petronny/action-tools
           path: action-tools
 
+      - run: cat ${GITHUB_EVENT_PATH}
+
       - name: Initialize
         run: ${GITHUB_WORKSPACE}/action-tools/initialize.sh
 
