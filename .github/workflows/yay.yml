@@ -38,6 +38,7 @@ jobs:
 
       - name: Pre-build
         run: |
+          cd ${GITHUB_WORKFLOW}
           aur-pre-build.sh
 
       - name: Build the package
