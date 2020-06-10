@@ -2,7 +2,7 @@ name: yay
 
 on:
   repository_dispatch:
-    types: [yay]
+    types: [yay-trigger]
 
 env:
   build_prefix: extra-x86_64
