@@ -12,13 +12,17 @@ from lilac2.lilacyaml import load_lilac_yaml
 
 def download_repo_depends(package=None):
     if package:
-        conf = load_lilac_yaml(Path('..') / package)
+        path = Path('..') / package
     else:
-        conf = load_lilac_yaml(Path('.'))
+        path = Path('.')
 
     _repo_depends = []
-    if 'repo_depends' in conf:
-        repo_depends = conf['repo_depends']
+    try:
+        conf = load_lilac_yaml(path)
+        if 'repo_depends' in conf:
+            repo_depends = conf['repo_depends']
+    except FileNotFoundError:
+        pass
 
     for i in repo_depends:
         run_cmd(['download-package-from-repo.sh', i, 'arch4edu', 'x86_64', '~/repo_depends'])
