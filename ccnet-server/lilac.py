@@ -21,7 +21,7 @@ def download_repo_depends(package=None):
         repo_depends = conf['repo_depends']
 
     for i in repo_depends:
-        run_cmd['download-package-from-repo.sh', i, 'arch4edu', 'x86_64', '~/repo_depends']
+        run_cmd(['download-package-from-repo.sh', i, 'arch4edu', 'x86_64', '~/repo_depends'])
         download_repo_depends(i)
 
 if __name__ == '__main__':
