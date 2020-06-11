@@ -2,7 +2,7 @@ name: ccnet-server
 
 on:
   repository_dispatch:
-    types: [ccnet-server]
+    types: [ccnet-server-trigger]
 
 jobs:
   build:

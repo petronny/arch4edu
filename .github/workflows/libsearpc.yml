@@ -2,7 +2,7 @@ name: libsearpc
 
 on:
   repository_dispatch:
-    types: [libsearpc]
+    types: [libsearpc-trigger]
 
 jobs:
   build:
