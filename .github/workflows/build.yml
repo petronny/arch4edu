@@ -51,6 +51,8 @@ jobs:
           ls -al
           su pkgbuild -c 'PYTHONPATH=~/lilac:~/lilac/vendor ./lilac.py' | tee ~/build.log
 
+      - run: post-build.sh
+
       - name: Upload package
         uses: actions/upload-artifact@v2
         with:
