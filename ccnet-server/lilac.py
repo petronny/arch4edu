@@ -29,7 +29,10 @@ def download_repo_depends(package=None):
         download_repo_depends(i)
 
 if __name__ == '__main__':
-    import sys
     download_repo_depends()
-    sys.exit()
-    single_main(build_prefix)
+
+    makechrootpkg_args = []
+    for i in Path('~/repo_depends').rglob('*.pkg.tar*'):
+        makechrootpkg_args += ['-I', i]
+
+    single_main(build_prefix, makechrootpkg_args=makechrootpkg_args)
