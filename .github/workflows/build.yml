@@ -4,6 +4,29 @@ on:
   repository_dispatch:
 
 jobs:
+
+  workflow_id:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Get event type
+        id: python
+        shell: python
+        run: |
+          import os
+          import json
+          event = json.load(open(os.environ['GITHUB_EVENT_PATH']))
+          print('::set-output name=event_type::%s' % event['action'])
+
+      - name: Get workflow id
+        run: echo ${GITHUB_RUN_ID} > ~/workflow_id
+
+      - name: Upload build log
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ steps.python.outputs.event_type }}.workflow_id
+          path: '~/workflow_id'
+
   build:
     runs-on: ubuntu-latest
     container:
@@ -13,18 +36,9 @@ jobs:
         - /sys/fs/cgroup:/sys/fs/cgroup
 
     steps:
-      - name: Initialize workflow
-        id: workflow
-        run: |
-          env
-          echo ${GITHUB_RUN_ID} > ~/workflow_id
-          echo "::set-output name=time::$(date +%F-%T)"
-
-      - name: Upload workflow id
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ steps.initialization.outputs.pkgbase }}.workflow_id
-          path: ~/workflow_id
+      - name: Get time
+        id: time
+        run: echo "::set-output name=time::$(date +%F-%T)"
 
       - name: Set up cache
         uses: actions/cache@master
