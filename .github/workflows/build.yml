@@ -62,16 +62,23 @@ jobs:
           cd ~/arch4edu/${{ steps.initialization.outputs.pkgbase }}
           ls -al
           su pkgbuild -c 'PYTHONPATH=~/lilac:~/lilac/vendor ./lilac.py' | tee ~/build.log
+          git show > ~/commit.patch
 
       - run: post-build.sh
 
       - name: Upload package
         uses: actions/upload-artifact@v2
         with:
-          name: packages
+          name: ${{ steps.initialization.outputs.pkgbase }}
           path: ${{ steps.initialization.outputs.home }}/arch4edu/${{ steps.initialization.outputs.pkgbase }}/*.pkg.tar.zst
 
-      - name: Upload logs
+      - name: Upload commit
+        uses: actions/upload-artifact@v2
+        with:
+          name: commit.patch
+          path: '~/commit.patch'
+
+      - name: Upload log
         uses: actions/upload-artifact@v2
         with:
           name: build.log
