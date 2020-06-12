@@ -53,6 +53,7 @@ jobs:
         run: |
           cd ~/arch4edu/${{ steps.initialization.outputs.pkgbase }}
           ls -al
+          set -o pipefail
           su pkgbuild -c "PYTHONPATH=~/lilac:~/lilac/vendor:${GITHUB_WORKSPACE}/action-tools ./lilac.py" | tee ~/build.log
           git show > ~/commit.patch
 
@@ -67,11 +68,11 @@ jobs:
       - name: Upload commit patch
         uses: actions/upload-artifact@v2
         with:
-          name: commit.patch
+          name: ${{ steps.initialization.outputs.pkgbase }}.patch
           path: '~/commit.patch'
 
       - name: Upload build log
         uses: actions/upload-artifact@v2
         with:
-          name: build.log
+          name: ${{ steps.initialization.outputs.pkgbase }}.log
           path: '~/build.log'
