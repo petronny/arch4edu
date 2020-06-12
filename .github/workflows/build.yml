@@ -64,7 +64,7 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ steps.python.outputs.event_type }}.workflow_id
+          name: ${{ steps.initialization.outputs.pkgbase }}.${{ steps.initialization.outputs.uuid }}
           path: '~/workflow_id'
 
       - name: Upload package
