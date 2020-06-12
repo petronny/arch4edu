@@ -8,4 +8,10 @@ pre_build = aur_pre_build
 post_build = aur_post_build
 
 if __name__ == '__main__':
-    single_main(build_prefix)
+    from action_tools import download_repo_depends
+    download_repo_depends()
+    makechrootpkg_args = []
+    for i in Path('~/repo_depends').rglob('*.pkg.tar*'):
+        makechrootpkg_args += ['-I', i]
+
+    single_main(build_prefix, makechrootpkg_args=makechrootpkg_args)
