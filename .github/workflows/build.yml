@@ -34,16 +34,6 @@ jobs:
           repository: petronny/lilac
           path: lilac
 
-      - uses: actions/checkout@master
-        with:
-          repository: arch4edu/arch4edu-keyring
-          path: keyring
-
-      - uses: actions/checkout@master
-        with:
-          repository: arch4edu/mirrorlist
-          path: mirrorlist
-
       - name: Initialize
         id: initialization
         run: ${GITHUB_WORKSPACE}/action-tools/initialize.sh
@@ -63,7 +53,7 @@ jobs:
         run: |
           cd ~/arch4edu/${{ steps.initialization.outputs.pkgbase }}
           ls -al
-          su pkgbuild -c 'PYTHONPATH=~/lilac:~/lilac/vendor ./lilac.py' | tee ~/build.log
+          su pkgbuild -c "PYTHONPATH=~/lilac:~/lilac/vendor:${GITHUB_WORKSPACE}/action-tools ./lilac.py" | tee ~/build.log
           git show > ~/commit.patch
 
       - run: post-build.sh
