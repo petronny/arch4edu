@@ -8,4 +8,5 @@ pre_build = aur_pre_build
 post_build = aur_post_build
 
 if __name__ == '__main__':
+    from action_tools import action_main
     action_main()
