@@ -5,28 +5,6 @@ on:
 
 jobs:
 
-  workflow_id:
-    runs-on: ubuntu-latest
-    steps:
-
-      - name: Get event type
-        id: python
-        shell: python
-        run: |
-          import os
-          import json
-          event = json.load(open(os.environ['GITHUB_EVENT_PATH']))
-          print('::set-output name=event_type::%s' % event['action'])
-
-      - name: Get workflow id
-        run: echo ${GITHUB_RUN_ID} > ~/workflow_id
-
-      - name: Upload build log
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ steps.python.outputs.event_type }}.workflow_id
-          path: '~/workflow_id'
-
   build:
     runs-on: ubuntu-latest
     container:
@@ -81,6 +59,13 @@ jobs:
           [ ${PIPESTATUS[0]} -eq 0 ] && git show > ~/commit.patch
 
       - run: post-build.sh
+
+      - name: Upload workflow id
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ steps.python.outputs.event_type }}.workflow_id
+          path: '~/workflow_id'
 
       - name: Upload package
         uses: actions/upload-artifact@v2
