@@ -58,6 +58,8 @@ jobs:
       - run: pre-build.sh
 
       - name: Build the package with lilac
+        env:
+          TOKEN: ${{ secrets.CALIL_GITHUB_TOKEN }}
         run: |
           cd ~/arch4edu/${{ steps.initialization.outputs.pkgbase }}
           ls -al
@@ -72,13 +74,13 @@ jobs:
           name: ${{ steps.initialization.outputs.pkgbase }}
           path: ${{ steps.initialization.outputs.home }}/arch4edu/${{ steps.initialization.outputs.pkgbase }}/*.pkg.tar.zst
 
-      - name: Upload commit
+      - name: Upload commit patch
         uses: actions/upload-artifact@v2
         with:
           name: commit.patch
           path: '~/commit.patch'
 
-      - name: Upload log
+      - name: Upload build log
         uses: actions/upload-artifact@v2
         with:
           name: build.log
