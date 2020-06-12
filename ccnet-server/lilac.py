@@ -7,6 +7,7 @@ repo_depends = ['libsearpc']
 pre_build = aur_pre_build
 post_build = aur_post_build
 
+import os
 from pathlib import Path
 from lilac2.lilacyaml import load_lilac_yaml
 
@@ -25,7 +26,16 @@ def download_repo_depends(package=None):
         pass
 
     for i in _repo_depends:
-        run_cmd(['download-package-from-repo.sh', i, 'arch4edu', 'x86_64', '~/repo_depends'])
+        if type(i) is tuple:
+            pkgbase, pkgname = i
+        else:
+            pkgbase, pkgname = i, i
+
+        try:
+            run_cmd(['download-package-from-artifact.sh', 'petronny/arch4edu', pkgbase, pkgname, '~/repo_depends', os.environ['TOKEN']])
+        except:
+            run_cmd(['download-package-from-repo.sh', pkgbase, 'arch4edu', 'x86_64', '~/repo_depends'])
+
         download_repo_depends(i)
 
 if __name__ == '__main__':
