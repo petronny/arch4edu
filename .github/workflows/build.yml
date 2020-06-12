@@ -73,6 +73,7 @@ jobs:
 
       - name: Upload build log
         uses: actions/upload-artifact@v2
+        if: ${{ always() }}
         with:
           name: ${{ steps.initialization.outputs.pkgbase }}.log
           path: '~/build.log'
