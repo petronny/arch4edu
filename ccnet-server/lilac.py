@@ -2,7 +2,8 @@
 from lilaclib import *
 
 maintainers = [{'github': 'petronny', 'email': 'Jingbei Li <i@jingbei.li>'}]
-build_prefix = 'extra-x86_64'
+update_on = [{'aur': None}]
+build_prefix = 'action-extra-x86_64'
 repo_depends = ['libsearpc']
 pre_build = aur_pre_build
 post_build = aur_post_build
