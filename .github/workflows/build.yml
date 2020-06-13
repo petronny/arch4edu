@@ -41,7 +41,7 @@ jobs:
 
       - uses: actions/checkout@master
         with:
-          repository: petronny/arch4edu
+          repository: arch4edu/arch4edu
           path: arch4edu
 
       - run: configure-arch4edu.sh
