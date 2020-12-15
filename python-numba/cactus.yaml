@@ -1,0 +1,6 @@
+update_on:
+- source: aur
+  aur:
+- alias: python
+repo_depends:
+  - python-llvmlite
